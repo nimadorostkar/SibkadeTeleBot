@@ -11,24 +11,32 @@ from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from django.conf import settings
 from celery import shared_task
-
+from collections import defaultdict
 
 
 TOKEN = "7445678382:AAG3-dxleieDz_dBJh4YCeMHQeuj389gM6U"
 
-
+@shared_task
 def send_weekly_orders():
-    print('---022---')
-    today = datetime.now()
-    one_week_ago = today - timedelta(days=7)
-    orders = Order.objects.filter(create_at__gte=one_week_ago)
-    print('---000---')
+    print('---022--------------6666666----------')
+    one_week_ago = datetime.now() - timedelta(days=7)
+    recent_orders = Order.objects.filter(create_at__gte=one_week_ago)
+    orders_by_user = defaultdict(list)
+    for order in recent_orders:
+        orders_by_user[order.user].append(order)
+    print("-----6--")
+    print(orders_by_user)
+    subject = 'Test Email from Django'
+    message = f'This is list of orders: \n {orders_by_user}'
+    recipient_list = ['nimadorostkar97@gmail.com']
+    email = EmailMessage(subject, message, settings.EMAIL_FROM_ADDRESS, recipient_list, )
+    email.send(fail_silently=False)
 
 
 
 
+@shared_task
 def my_daily_task():
-    print('-44-')
     orders = Order.objects.filter(status="Done")
     for item in orders:
         expiration_date = datetime.strptime(item.expiration, "%Y-%m-%d")
@@ -43,19 +51,17 @@ def my_daily_task():
             bot = telebot.TeleBot(TOKEN)
             bot.send_message(chat_id=item.chat_id, text=f"3 days until the end of your service. \norder_code: {item.order_code} \nyour service expiration is {item.expiration}",reply_to_message_id=item.message_id)
 
+
+
 @shared_task
 def min():
     print('---022---')
+    subject = 'Test Email from Django'
+    message = 'This is a test email sent from Django using SMTP on Liara server.'
+    recipient_list = ['nimadorostkar97@gmail.com']
+    email = EmailMessage(subject, message, settings.EMAIL_FROM_ADDRESS, recipient_list, )
+    email.send(fail_silently=False)
 
 
 
 
-
-
-''' 
-subject = 'Test Email from Django'
-message = 'This is a test email sent from Django using SMTP on Liara server.'
-recipient_list = ['nimadorostkar97@gmail.com']
-email = EmailMessage(subject,message,settings.EMAIL_FROM_ADDRESS,recipient_list,)
-email.send(fail_silently=False)
-'''
