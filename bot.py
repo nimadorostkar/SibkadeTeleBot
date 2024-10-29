@@ -5,6 +5,9 @@ import json
 from datetime import datetime, timedelta, date
 import requests
 import json
+from dateutil.relativedelta import relativedelta
+
+
 
 TOKEN = "7445678382:AAG3-dxleieDz_dBJh4YCeMHQeuj389gM6U"
 
@@ -23,7 +26,7 @@ def read_json_from_api_link(api_link):
         print(f"Error decoding JSON data: {e}")
 
 
-
+'''
 def add_months(current_date, months_to_add):
     new_date = datetime(
         current_date.year + (current_date.month + months_to_add - 1) // 12,
@@ -31,6 +34,15 @@ def add_months(current_date, months_to_add):
         current_date.day
     )
     return new_date
+'''
+
+
+def add_months(current_date, months_to_add):
+    return current_date + relativedelta(months=months_to_add)
+
+
+
+
 
 
 with open('products.json', 'r') as file:
