@@ -1,0 +1,55 @@
+
+services:
+  redis:
+    container_name: redis
+    image: redis:7.0
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      main:
+
+  celery:
+    build: .
+    command: celery -A panel worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+
+  celery-beat:
+    build: .
+    command: celery -A panel beat --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+      - celery
+
+  backend:
+    container_name: backend
+    build: ./
+    command: sh -c "python manage.py makemigrations &&
+      python manage.py migrate &&
+      python manage.py collectstatic --no-input &&
+      gunicorn --bind 0.0.0.0:8000 --workers=4 --log-level=debug --capture-output --chdir=/bot_panel_back panel.wsgi:application"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - celery
+      - celery-beat
+    restart: unless-stopped
+    networks:
+      main:
+
+networks:
+  main:
+
+volumes:
+  redis-data:
+    driver: local
+
+
