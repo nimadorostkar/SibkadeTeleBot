@@ -10,6 +10,9 @@ from email.mime.text import MIMEText
 from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from django.conf import settings
+from celery import shared_task
+
+
 
 TOKEN = "7445678382:AAG3-dxleieDz_dBJh4YCeMHQeuj389gM6U"
 
@@ -40,7 +43,7 @@ def my_daily_task():
             bot = telebot.TeleBot(TOKEN)
             bot.send_message(chat_id=item.chat_id, text=f"3 days until the end of your service. \norder_code: {item.order_code} \nyour service expiration is {item.expiration}",reply_to_message_id=item.message_id)
 
-
+@shared_task
 def min():
     print('---022---')
 
