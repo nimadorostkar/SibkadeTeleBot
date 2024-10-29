@@ -9,17 +9,13 @@ app = Celery('panel')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 app.conf.beat_schedule = {
-    'run-my-task-every-minute': {
-        'task': 'order.tasks.min',
-        'schedule': crontab(minute='*/1'),  # every minute
-    },
     'run-my-daily-task': {
         'task': 'order.tasks.my_daily_task',
         'schedule': crontab(hour=0, minute=0),  # every day at midnight
     },
     'run-my-weekly-task': {
         'task': 'order.tasks.send_weekly_orders',
-        'schedule': crontab(day_of_week='sunday', hour=0, minute=0),  # every Sunday at midnight
+        'schedule': crontab(day_of_week='friday', hour=0, minute=0),  # every Sunday at midnight
     },
 }
 app.conf.timezone = 'UTC'

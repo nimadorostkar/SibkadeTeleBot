@@ -53,15 +53,4 @@ def my_daily_task():
 
 
 
-@shared_task
-def min():
-    print('---022---')
-    subject = 'Test Email from Django'
-    message = 'This is a test email sent from Django using SMTP on Liara server.'
-    recipient_list = ['nimadorostkar97@gmail.com']
-    email = EmailMessage(subject, message, settings.EMAIL_FROM_ADDRESS, recipient_list, )
-    email.send(fail_silently=False)
-
-
-
 
