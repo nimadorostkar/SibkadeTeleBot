@@ -18,3 +18,4 @@ whitenoise
 django-filter
 celery==5.4.0
 redis==3.5.3
+python-dateutil
