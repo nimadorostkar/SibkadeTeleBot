@@ -140,9 +140,17 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     f"🗂️ Order Code: {order_code} \n\n👤 User: {user} \n🪪AppleID: {email_field} \n🛍️ You selected a AppleMusic with {subs} subscription.\n\n🎫Code: {link_item['code']}  \n🔗 Link: \n {link_item['link']} \n\n📅Expiration: {expiration.date()}   \n\n 🙏 Thank you for using our bot",
                     reply_markup=markupp)
             else:
+                post_data = {
+                    'order_code': order_code,
+                    'user': user,
+                    'chat_id': update.message.chat_id,
+                    'message_id': update.message.message_id,
+                    'input': update.message.text
+                }
+                requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
                 bttn = InlineKeyboardButton("Contact support", callback_data='support')
                 markupp = InlineKeyboardMarkup([[bttn]])
-                await update.message.reply_text("Not active link found for AppleMusic.", reply_markup=markupp)
+                await update.message.reply_text("Not active link found, Your order has been registered, we will send it to you once it is ready", reply_markup=markupp)
 
 
 
@@ -183,9 +191,22 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     f"🗂️ Order Code: {order_code} \n\n👤 User: {user} \n🪪AppleID: {email_field} \n🛍️ You selected a AppleOne with {subs} subscription.\n\n🎫Code: {link_item['code']}  \n🔗 Link: \n {link_item['link']} \n\n📅Expiration: {expiration.date()}   \n\n 🙏 Thank you for using our bot",
                     reply_markup=markupp)
             else:
+                post_data = {
+                    'order_code': order_code,
+                    'user': user,
+                    'chat_id': update.message.chat_id,
+                    'message_id': update.message.message_id,
+                    'input': update.message.text
+                }
+                requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
                 bttn = InlineKeyboardButton("Contact support", callback_data='support')
                 markupp = InlineKeyboardMarkup([[bttn]])
-                await update.message.reply_text("Not active link found for AppleMusic.", reply_markup=markupp)
+                await update.message.reply_text(
+                    "Not active link found, Your order has been registered, we will send it to you once it is ready",
+                    reply_markup=markupp)
+
+
+
 
 
     else:
@@ -222,9 +243,19 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                 markupp = InlineKeyboardMarkup([[bttn]])
                 await update.message.reply_text(f"🗂️ Order Code: {order_code} \n\n👤 User: {user} \n🪪AppleID: {email_field} \n🛍️ You selected a {selected_product} with {subscription} subscription.\n\n🎫Code: {link_item['code']}  \n🔗 Link: \n {link_item['link']} \n\n📅Expiration: {expiration.date()}   \n\n 🙏 Thank you for using our bot",reply_markup=markupp)
             else:
+                post_data = {
+                    'order_code': order_code,
+                    'user': user,
+                    'chat_id': update.message.chat_id,
+                    'message_id': update.message.message_id,
+                    'input': update.message.text
+                }
+                requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
                 bttn = InlineKeyboardButton("Contact support", callback_data='support')
                 markupp = InlineKeyboardMarkup([[bttn]])
-                await update.message.reply_text("Not active link found for AppleMusic.", reply_markup=markupp)
+                await update.message.reply_text(
+                    "Not active link found, Your order has been registered, we will send it to you once it is ready",
+                    reply_markup=markupp)
 
 
         elif context.user_data['product'] == "Spotify":
@@ -263,9 +294,19 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     f"🗂️ Order Code: {order_code} \n\n👤 User: {user} \n🪪AppleID: {email_field} \n🛍️ You selected a {selected_product} with {subscription} subscription.\n\n🎫Code: {link_item['code']}  \n🔗 Link: \n {link_item['link']} \n\n📅Expiration: {expiration.date()}   \n\n 🙏 Thank you for using our bot",
                     reply_markup=markupp)
             else:
+                post_data = {
+                    'order_code': order_code,
+                    'user': user,
+                    'chat_id': update.message.chat_id,
+                    'message_id': update.message.message_id,
+                    'input': update.message.text
+                }
+                requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
                 bttn = InlineKeyboardButton("Contact support", callback_data='support')
                 markupp = InlineKeyboardMarkup([[bttn]])
-                await update.message.reply_text("Not active link found for AppleOne.", reply_markup=markupp)
+                await update.message.reply_text(
+                    "Not active link found, Your order has been registered, we will send it to you once it is ready",
+                    reply_markup=markupp)
 
 
 
