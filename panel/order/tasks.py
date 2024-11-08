@@ -16,6 +16,7 @@ from collections import defaultdict
 
 TOKEN = "7445678382:AAG3-dxleieDz_dBJh4YCeMHQeuj389gM6U"
 
+
 @shared_task
 def send_weekly_orders():
     one_week_ago = datetime.now() - timedelta(days=7)
@@ -25,10 +26,10 @@ def send_weekly_orders():
         orders_by_user[order.user].append(order)
     print("-----6--")
     print(orders_by_user)
-    subject = 'Test Email from Django'
-    message = f'This is list of orders: \n {orders_by_user}'
-    recipient_list = ['nimadorostkar97@gmail.com']
-    email = EmailMessage(subject, message, settings.EMAIL_FROM_ADDRESS, recipient_list, )
+    subject = f'this week orders {datetime.now()}'
+    message = f'This is list of orders: \n\n {orders_by_user}'
+    recipient_list = ['nimadorostkar97@gmail.com','sibkade.orders@gmail.com']
+    email = EmailMessage(subject, message, settings.EMAIL_FROM_ADDRESS, recipient_list)
     email.send(fail_silently=False)
 
 

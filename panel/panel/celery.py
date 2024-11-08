@@ -7,6 +7,7 @@ from celery.schedules import crontab
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'panel.settings')
 app = Celery('panel')
 app.config_from_object('django.conf:settings', namespace='CELERY')
+app.autodiscover_tasks()
 
 app.conf.beat_schedule = {
     'run-my-daily-task': {
@@ -19,5 +20,5 @@ app.conf.beat_schedule = {
     },
 }
 app.conf.timezone = 'UTC'
-app.autodiscover_tasks()
+
 
