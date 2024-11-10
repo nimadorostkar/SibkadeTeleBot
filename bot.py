@@ -26,7 +26,6 @@ def read_json_from_api_link(api_link):
         print(f"Error decoding JSON data: {e}")
 
 
-
 def add_months(current_date, months_to_add):
     return current_date + relativedelta(months=months_to_add)
 
@@ -61,6 +60,12 @@ SUBSCRIPTIONS = {
     'default': ['2 month', '4 month', '6 month'],
     'spotify': ['1 month', '3 month', '6 month', '12 month']
 }
+
+
+def get_subscription_options(product):
+    # Return specific subscription if it exists for the product; otherwise, return the default
+    return SUBSCRIPTIONS.get(product, SUBSCRIPTIONS['default'])
+
 
 
 async def actions(update: Update, context: CallbackContext) -> None:
@@ -338,9 +343,10 @@ async def choose_product(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     reply_markup = InlineKeyboardMarkup(keyboard)
     await query.edit_message_text(text=f'You selected {product}. Now, choose a subscription period:', reply_markup=reply_markup)
     if product == "Spotify":
-        return SUBSCRIPTIONS['spotify']
+        subscription_options = get_subscription_options("spotify")
     else:
-        return SUBSCRIPTIONS['default']
+        subscription_options = get_subscription_options("default")
+    return subscription_options
 
 # Subscription selection handler
 async def choose_subscription(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
