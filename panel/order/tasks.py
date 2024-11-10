@@ -13,6 +13,7 @@ TOKEN = "7445678382:AAG3-dxleieDz_dBJh4YCeMHQeuj389gM6U"
 
 @shared_task
 def send_weekly_orders():
+    bot = telebot.TeleBot(TOKEN)
     seven_days_ago = timezone.now() - timedelta(days=7)
     orders = (Order.objects.filter(create_at__gte=seven_days_ago).values('user', 'type', 'month').annotate(count=Count('id')))
 
@@ -28,10 +29,11 @@ def send_weekly_orders():
         message += f"{user}:\n"
         for order in orders:
             message += f"  {order} \n\n"
+            bot.send_message(chat_id="1759061065", text=message, parse_mode='Markdown')
 
-    bot = telebot.TeleBot(TOKEN)
+
     #bot.send_message(chat_id="1759061065",text=message, parse_mode=ParseMode.HTML)
-    bot.send_message(chat_id="1759061065", text=f"```\n{message}\n```", parse_mode='Markdown')
+    #bot.send_message(chat_id="1759061065", text=f"```\n{message}\n```", parse_mode='Markdown')
 
 
 @shared_task
