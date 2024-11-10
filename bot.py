@@ -56,9 +56,11 @@ CATEGORY, PRODUCT, SUBSCRIPTION = range(3)
 # Example data for categories, products, and subscription periods
 CATEGORIES = CATS
 PRODUCTS = data
-SUBSCRIPTIONS = ['2 month', '4 month', '6 month']
-SPOTIFY_SUBSCRIPTIONS = ['1 month', '3 month', '6 month', '12 month']
-
+#SUBSCRIPTIONS = ['2 month', '4 month', '6 month']
+SUBSCRIPTIONS = {
+    'default': ['2 month', '4 month', '6 month'],
+    'spotify': ['1 month', '3 month', '6 month', '12 month']
+}
 
 
 async def actions(update: Update, context: CallbackContext) -> None:
@@ -336,9 +338,9 @@ async def choose_product(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     reply_markup = InlineKeyboardMarkup(keyboard)
     await query.edit_message_text(text=f'You selected {product}. Now, choose a subscription period:', reply_markup=reply_markup)
     if product == "Spotify":
-        return SPOTIFY_SUBSCRIPTIONS
+        return SUBSCRIPTIONS['spotify']
     else:
-        return SUBSCRIPTION
+        return SUBSCRIPTIONS['default']
 
 # Subscription selection handler
 async def choose_subscription(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
