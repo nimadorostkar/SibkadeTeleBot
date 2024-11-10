@@ -20,7 +20,7 @@ class Order(models.Model):
     chat_id = models.CharField(max_length=255)
     message_id = models.CharField(max_length=255)
     month = models.IntegerField(blank=True, null=True)
-    expiration = models.CharField(max_length=255,blank=True, null=True)
+    expiration = models.CharField(max_length=255, blank=True, null=True)
     input = models.CharField(max_length=255, blank=True, null=True)
     response = models.CharField(max_length=10000, blank=True, null=True)
     create_at = models.DateTimeField(auto_now_add=True)
