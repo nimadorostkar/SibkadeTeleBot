@@ -249,7 +249,7 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     'user': user,
                     'chat_id': update.message.chat_id,
                     'message_id': update.message.message_id,
-                    'month': int(subscription[0]),
+                    'month': int(subscription[:2]),
                     'input': update.message.text
                 }
                 requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
