@@ -130,6 +130,7 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     'user': user,
                     'chat_id': update.message.chat_id,
                     'message_id': update.message.message_id,
+                    'month': int(subs[0]),
                     'expiration': expiration.date(),
                     'input': update.message.text
                 }
@@ -144,13 +145,14 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     'order_code': order_code,
                     'user': user,
                     'chat_id': update.message.chat_id,
+                    'month': int(subs[0]),
                     'message_id': update.message.message_id,
                     'input': update.message.text
                 }
                 requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
                 bttn = InlineKeyboardButton("Contact support", callback_data='support')
                 markupp = InlineKeyboardMarkup([[bttn]])
-                await update.message.reply_text("Not active link found, Your order has been registered, we will send it to you once it is ready", reply_markup=markupp)
+                await update.message.reply_text(f"Not active link found, Your order has been registered, we will send it to you once it is ready. \n🗂️ Order Code: {order_code} ", reply_markup=markupp)
 
 
 
@@ -159,6 +161,7 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                 'order_code': order_code,
                 'user': user,
                 'chat_id': update.message.chat_id,
+                'month': int(subs[0]),
                 'message_id': update.message.message_id,
                 'input': update.message.text
             }
@@ -181,6 +184,7 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     'user': user,
                     'chat_id': update.message.chat_id,
                     'message_id': update.message.message_id,
+                    'month': int(subs[0]),
                     'expiration': expiration.date(),
                     'input': update.message.text
                 }
@@ -196,13 +200,14 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     'user': user,
                     'chat_id': update.message.chat_id,
                     'message_id': update.message.message_id,
+                    'month': int(subs[0]),
                     'input': update.message.text
                 }
                 requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
                 bttn = InlineKeyboardButton("Contact support", callback_data='support')
                 markupp = InlineKeyboardMarkup([[bttn]])
                 await update.message.reply_text(
-                    "Not active link found, Your order has been registered, we will send it to you once it is ready",
+                    f"Not active link found, Your order has been registered, we will send it to you once it is ready. \n🗂️ Order Code: {order_code}",
                     reply_markup=markupp)
 
 
@@ -235,6 +240,7 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     'user': user,
                     'chat_id': update.message.chat_id,
                     'message_id': update.message.message_id,
+                    'month': int(subscription[0]),
                     'expiration': expiration.date(),
                     'input': answer
                 }
@@ -248,13 +254,14 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     'user': user,
                     'chat_id': update.message.chat_id,
                     'message_id': update.message.message_id,
+                    'month': int(subscription[0]),
                     'input': update.message.text
                 }
                 requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
                 bttn = InlineKeyboardButton("Contact support", callback_data='support')
                 markupp = InlineKeyboardMarkup([[bttn]])
                 await update.message.reply_text(
-                    "Not active link found, Your order has been registered, we will send it to you once it is ready",
+                    f"Not active link found, Your order has been registered, we will send it to you once it is ready. \n🗂️ Order Code: {order_code}",
                     reply_markup=markupp)
 
 
@@ -264,6 +271,7 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                 'user': user,
                 'chat_id': update.message.chat_id,
                 'message_id': update.message.message_id,
+                'month': int(subscription[0]),
                 'input': answer
             }
             requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
@@ -284,6 +292,7 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     'user': user,
                     'chat_id': update.message.chat_id,
                     'message_id': update.message.message_id,
+                    'month': int(subscription[0]),
                     'expiration': expiration.date(),
                     'input': answer
                 }
@@ -299,13 +308,14 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     'user': user,
                     'chat_id': update.message.chat_id,
                     'message_id': update.message.message_id,
+                    'month': int(subscription[0]),
                     'input': update.message.text
                 }
                 requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
                 bttn = InlineKeyboardButton("Contact support", callback_data='support')
                 markupp = InlineKeyboardMarkup([[bttn]])
                 await update.message.reply_text(
-                    "Not active link found, Your order has been registered, we will send it to you once it is ready",
+                    f"Not active link found, Your order has been registered, we will send it to you once it is ready. \n🗂️ Order Code: {order_code}",
                     reply_markup=markupp)
 
 

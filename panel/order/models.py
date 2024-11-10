@@ -5,7 +5,6 @@ from django.dispatch import receiver
 import telebot
 
 
-
 class Order(models.Model):
     status_choices = (
         ("New", "New"),
@@ -20,6 +19,7 @@ class Order(models.Model):
     user = models.CharField(max_length=255)
     chat_id = models.CharField(max_length=255)
     message_id = models.CharField(max_length=255)
+    month = models.IntegerField(blank=True, null=True)
     expiration = models.CharField(max_length=255)
     input = models.CharField(max_length=255, blank=True, null=True)
     response = models.CharField(max_length=10000, blank=True, null=True)
