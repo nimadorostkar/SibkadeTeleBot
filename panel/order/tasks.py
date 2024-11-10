@@ -9,6 +9,7 @@ from django.db.models import Q, Count
 TOKEN = "7445678382:AAG3-dxleieDz_dBJh4YCeMHQeuj389gM6U"
 
 
+
 @shared_task
 def send_weekly_orders():
     # Calculate the date for 7 days ago
