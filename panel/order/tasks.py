@@ -28,7 +28,7 @@ def send_weekly_orders():
     print(orders_by_user)
     message = f'This is list of orders: \n\n {orders_by_user}'
     bot = telebot.TeleBot(TOKEN)
-    bot.send_message(chat_id="-4516176630",text=message)
+    bot.send_message(chat_id="1759061065",text=message)
 
 
 
