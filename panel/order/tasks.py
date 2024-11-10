@@ -15,20 +15,27 @@ TOKEN = "7445678382:AAG3-dxleieDz_dBJh4YCeMHQeuj389gM6U"
 def send_weekly_orders():
     bot = telebot.TeleBot(TOKEN)
     seven_days_ago = timezone.now() - timedelta(days=7)
-    orders = (Order.objects.filter(create_at__gte=seven_days_ago).values('user', 'type', 'month').annotate(count=Count('id')))
 
-    user_orders = defaultdict(list)
-    for order in orders:
-        user = order['user']
-        type_and_month = f"{order['month']} month {order['type']}"
-        count = order['count']
-        user_orders[user].append(f"{type_and_month}, count: {count}")
+    # Query and group by user, month, and type
+    order_summary = (
+        Order.objects.filter(create_at__gte=seven_days_ago)
+        .values('user', 'type', 'month')
+        .annotate(order_count=Count('id'))
+        .order_by('user', 'type', 'month')
+    )
 
+    # Prepare message content
+    message = "Order Summary (Last 7 Days):\n\n"
+    for order in order_summary:
+        message += (
+            f"User: {order['user']}\n"
+            f"Type: {order['type']}\n"
+            f"Month: {order['month']}\n"
+            f"Order Count: {order['order_count']}\n\n"
+        )
 
-    for user, orders in user_orders.items():
-        bot.send_message(chat_id="1759061065", text=f"{user}:\n", parse_mode='Markdown')
-        for order in orders:
-            bot.send_message(chat_id="1759061065", text=f"  {order} \n", parse_mode='Markdown')
+    bot.send_message(chat_id="1759061065", text=f"```\n{message}\n```", parse_mode='Markdown')
+
 
     #bot.send_message(chat_id="1759061065",text=message, parse_mode=ParseMode.HTML)
     #bot.send_message(chat_id="1759061065", text=f"```\n{message}\n```", parse_mode='Markdown')
