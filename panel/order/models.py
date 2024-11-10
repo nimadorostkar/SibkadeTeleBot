@@ -12,8 +12,13 @@ class Order(models.Model):
         ("In-process", "In-process"),
         ("Expired", "Expired"),
         ("Cancelled", "Cancelled"),)
+    type_choices = (
+        ("AppleMusic", "AppleMusic"),
+        ("AppleOne", "AppleOne"),
+        ("Spotify", "Spotify"),)
 
     status = models.CharField(max_length=15, default="New", choices=status_choices)
+    type = models.CharField(max_length=100, choices=type_choices)
     order_code = models.CharField(max_length=255)
     link = models.ForeignKey(Link, on_delete=models.CASCADE, blank=True, null=True)
     user = models.CharField(max_length=255)
@@ -29,23 +34,3 @@ class Order(models.Model):
     def __str__(self):
         return str(self.user) +" "+ str(self.order_code)
 
-
-
-''' 
-@receiver(pre_save, sender=Order)
-def store_old_response(sender, instance, **kwargs):
-    if instance.pk:
-        try:
-            old_instance = sender.objects.get(pk=instance.pk)
-            instance._old_response = old_instance.response
-        except sender.DoesNotExist:
-            instance._old_response = None
-
-@receiver(post_save, sender=Order)
-def handle_response_update(sender, instance, **kwargs):
-    TOKEN = "7445678382:AAG3-dxleieDz_dBJh4YCeMHQeuj389gM6U"
-    if hasattr(instance, '_old_response') and instance._old_response != instance.response:
-        print(f" {instance.response} has been updated.")
-        bot = telebot.TeleBot(TOKEN)
-        bot.send_message(chat_id=instance.chat_id,text=f"Your order is ready: \n {instance.response} ", reply_to_message_id=instance.message_id)
-'''
