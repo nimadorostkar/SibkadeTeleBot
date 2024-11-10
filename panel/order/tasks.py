@@ -24,22 +24,29 @@ def send_weekly_orders():
         .order_by('user', 'month', 'type')
     )
 
-    # Prepare data in a formatted string
-    message = ""
-    current_user = None
+    # Organize data by user for a more structured format
+    user_data = {}
     for order in orders:
         user = order['user']
         month = order['month']
         order_type = order['type']
         count = order['order_count']
 
-        if user != current_user:
-            if current_user is not None:
-                message += "\n"  # Separate different users with a line break
-            message += f"User: {user}\n"
-            current_user = user
+        if user not in user_data:
+            user_data[user] = {}
+        if month not in user_data[user]:
+            user_data[user][month] = {}
+        user_data[user][month][order_type] = count
 
-        message += f"  Month: {month}, Type: {order_type}, Count: {count}\n"
+    # Convert the data to a string format for easy reading
+    message = ""
+    for user, months in user_data.items():
+        message += f"User: {user}\n"
+        for month, types in months.items():
+            message += f"  Month: {month}\n"
+            for order_type, count in types.items():
+                message += f"    Type: {order_type}, Count: {count}\n"
+        message += "\n"  # Separate different users with a line break
 
     # Print or send this message via the bot
     print(message)
