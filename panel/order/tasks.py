@@ -5,6 +5,8 @@ import telebot
 from celery import shared_task
 from collections import defaultdict
 from django.db.models import Q, Count
+from django.utils import timezone
+
 
 TOKEN = "7445678382:AAG3-dxleieDz_dBJh4YCeMHQeuj389gM6U"
 
@@ -12,27 +14,24 @@ TOKEN = "7445678382:AAG3-dxleieDz_dBJh4YCeMHQeuj389gM6U"
 
 @shared_task
 def send_weekly_orders():
-    seven_days_ago = datetime.now() - timedelta(days=7)
-    orders = Order.objects.filter(create_at__gte=seven_days_ago)
-    grouped_orders = {}
+    seven_days_ago = timezone.now() - timedelta(days=7)
+    orders = (Order.objects.filter(create_at__gte=seven_days_ago).values('user', 'type', 'month').annotate(count=Count('id')))
+
+    user_orders = defaultdict(list)
     for order in orders:
-        user = order.user
-        month = order.month
-        type_ = order.type
+        user = order['user']
+        type_and_month = f"{order['month']} month {order['type']}"
+        count = order['count']
+        user_orders[user].append(f"{type_and_month}, count: {count}")
 
-        # Initialize nested dictionary structure if not present
-        if user not in grouped_orders:
-            grouped_orders[user] = {}
-        if month not in grouped_orders[user]:
-            grouped_orders[user][month] = {}
-        if type_ not in grouped_orders[user][month]:
-            grouped_orders[user][month][type_] = []
-
-        # Append the order to the relevant grouping
-        grouped_orders[user][month][type_].append(order)
+    message = " "
+    for user, orders in user_orders.items():
+        message += f"{user}:\n"
+        for order in orders:
+            message += f"  {order} \n\n"
 
     bot = telebot.TeleBot(TOKEN)
-    bot.send_message(chat_id="1759061065",text=grouped_orders)
+    bot.send_message(chat_id="1759061065",text=message)
 
 
 
