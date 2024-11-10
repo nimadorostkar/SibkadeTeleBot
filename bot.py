@@ -94,7 +94,6 @@ async def button(update: Update, context: CallbackContext) -> None:
         #await context.bot.send_message(chat_id='5554989830', text="SibkadePartners Bot Support...")
 
 
-
 async def handle_message(update: Update, context: CallbackContext) -> None:
     first_line = update.message.text.splitlines()[0].lower()
     if first_line.lower() == 'hey sibkade':
