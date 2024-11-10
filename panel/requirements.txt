@@ -19,3 +19,4 @@ django-allauth
 celery==5.4.0
 redis==3.5.3
 telebot
+python-telegram-bot==21.3

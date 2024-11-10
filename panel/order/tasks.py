@@ -6,7 +6,7 @@ from celery import shared_task
 from collections import defaultdict
 from django.db.models import Q, Count
 from django.utils import timezone
-
+from telegram import ParseMode
 
 TOKEN = "7445678382:AAG3-dxleieDz_dBJh4YCeMHQeuj389gM6U"
 
@@ -31,8 +31,7 @@ def send_weekly_orders():
             message += f"  {order} \n\n"
 
     bot = telebot.TeleBot(TOKEN)
-    bot.send_message(chat_id="1759061065",text=message, parse_mode='Markdown')
-
+    bot.send_message(chat_id="1759061065",text=message, parse_mode=ParseMode.HTML)
 
 
 @shared_task
