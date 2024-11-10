@@ -26,22 +26,9 @@ def read_json_from_api_link(api_link):
         print(f"Error decoding JSON data: {e}")
 
 
-'''
-def add_months(current_date, months_to_add):
-    new_date = datetime(
-        current_date.year + (current_date.month + months_to_add - 1) // 12,
-        (current_date.month + months_to_add - 1) % 12 + 1,
-        current_date.day
-    )
-    return new_date
-'''
-
 
 def add_months(current_date, months_to_add):
     return current_date + relativedelta(months=months_to_add)
-
-
-
 
 
 
@@ -70,6 +57,7 @@ CATEGORY, PRODUCT, SUBSCRIPTION = range(3)
 CATEGORIES = CATS
 PRODUCTS = data
 SUBSCRIPTIONS = ['2 month', '4 month', '6 month']
+SPOTIFY_SUBSCRIPTIONS = ['1 month', '3 month', '6 month', '12 month']
 
 
 
@@ -161,7 +149,7 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                 'order_code': order_code,
                 'user': user,
                 'chat_id': update.message.chat_id,
-                'month': int(subs[0]),
+                'month': int(subscription),
                 'message_id': update.message.message_id,
                 'input': update.message.text
             }
@@ -347,7 +335,10 @@ async def choose_product(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     keyboard = [[InlineKeyboardButton(subscription, callback_data=subscription)] for subscription in SUBSCRIPTIONS]
     reply_markup = InlineKeyboardMarkup(keyboard)
     await query.edit_message_text(text=f'You selected {product}. Now, choose a subscription period:', reply_markup=reply_markup)
-    return SUBSCRIPTION
+    if product == "Spotify":
+        return SPOTIFY_SUBSCRIPTIONS
+    else:
+        return SUBSCRIPTION
 
 # Subscription selection handler
 async def choose_subscription(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:

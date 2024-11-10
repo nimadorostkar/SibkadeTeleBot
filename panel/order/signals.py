@@ -37,7 +37,7 @@ def handle_response_update(sender, instance, **kwargs):
         if instance._old_response != instance.response:
             message += f"Response updated: {instance.response}\n"
         if instance._old_link != instance.link:
-            message += f"Link updated: {instance.link}\n"
+            message += f"Link updated: {instance.link.link}\n"
         message += f"Expiration: {expiration.date()}"
 
         bot = telebot.TeleBot(TOKEN)
