@@ -208,7 +208,6 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
 
 
 
-
     else:
         answer = update.message.text
         selected_product = context.user_data['product']
