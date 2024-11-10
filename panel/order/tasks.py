@@ -24,13 +24,11 @@ def send_weekly_orders():
         count = order['count']
         user_orders[user].append(f"{type_and_month}, count: {count}")
 
-    message = " "
-    for user, orders in user_orders.items():
-        message += f"{user}:\n"
-        for order in orders:
-            message += f"  {order} \n\n"
-            bot.send_message(chat_id="1759061065", text=message, parse_mode='Markdown')
 
+    for user, orders in user_orders.items():
+        bot.send_message(chat_id="1759061065", text=f"{user}:\n", parse_mode='Markdown')
+        for order in orders:
+            bot.send_message(chat_id="1759061065", text=f"  {order} \n", parse_mode='Markdown')
 
     #bot.send_message(chat_id="1759061065",text=message, parse_mode=ParseMode.HTML)
     #bot.send_message(chat_id="1759061065", text=f"```\n{message}\n```", parse_mode='Markdown')
