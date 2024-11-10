@@ -58,7 +58,7 @@ PRODUCTS = data
 #SUBSCRIPTIONS = ['2 month', '4 month', '6 month']
 SUBSCRIPTIONS = {
     'default': ['2 month', '4 month', '6 month'],
-    'spotify': ['1 month', '3 month', '6 month', '12 month']
+    'Spotify': ['1 month', '3 month', '6 month', '12 month']
 }
 
 
@@ -342,10 +342,8 @@ async def choose_product(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     keyboard = [[InlineKeyboardButton(subscription, callback_data=subscription)] for subscription in SUBSCRIPTIONS]
     reply_markup = InlineKeyboardMarkup(keyboard)
     await query.edit_message_text(text=f'You selected {product}. Now, choose a subscription period:', reply_markup=reply_markup)
-    if product == "Spotify":
-        subscription_options = get_subscription_options("spotify")
-    else:
-        subscription_options = get_subscription_options("default")
+    subscription_options = get_subscription_options(product)
+    print(subscription_options)
     return subscription_options
 
 # Subscription selection handler
