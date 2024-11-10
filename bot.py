@@ -104,12 +104,18 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
         user = update.message.from_user.username
         order_code = datetime.now().strftime("%Y%m%d%H%M%S")
 
-        if subscription == "2":
+        if subscription == "1":
+            subs = "1 month"
+        elif subscription == "2":
             subs = "2 month"
+        elif subscription == "3":
+            subs = "3 month"
         elif subscription == "4":
             subs = "4 month"
         elif subscription == "6":
             subs = "6 month"
+        elif subscription == "12":
+            subs = "12 month"
 
         if selected_product == "AppleMusic" or selected_product == "applemusic":
             links_response = requests.get(
@@ -156,7 +162,7 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                 'order_code': order_code,
                 'user': user,
                 'chat_id': update.message.chat_id,
-                'month': int(subscription),
+                'month': int(subs[:2]),
                 'message_id': update.message.message_id,
                 'input': update.message.text
             }
