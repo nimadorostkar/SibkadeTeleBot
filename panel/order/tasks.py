@@ -24,14 +24,11 @@ def send_weekly_orders():
     orders_by_user = defaultdict(list)
     for order in recent_orders:
         orders_by_user[order.user].append(order)
-    print("-----6--")
+    print("-----------")
     print(orders_by_user)
-    subject = f'this week orders {datetime.now()}'
     message = f'This is list of orders: \n\n {orders_by_user}'
-    recipient_list = ['nimadorostkar97@gmail.com','sibkade.orders@gmail.com']
-    email = EmailMessage(subject, message, settings.EMAIL_FROM_ADDRESS, recipient_list)
-    email.send(fail_silently=False)
-
+    bot = telebot.TeleBot(TOKEN)
+    bot.send_message(chat_id="-4516176630",text=message)
 
 
 
