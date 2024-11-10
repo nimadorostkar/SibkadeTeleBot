@@ -31,7 +31,7 @@ def send_weekly_orders():
             message += f"  {order} \n\n"
 
     bot = telebot.TeleBot(TOKEN)
-    bot.send_message(chat_id="1759061065",text=message)
+    bot.send_message(chat_id="1759061065",text=message, parse_mode='Markdown')
 
 
 
