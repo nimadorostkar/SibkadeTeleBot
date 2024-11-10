@@ -321,9 +321,6 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
 
 
 
-
-
-
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
     keyboard = [[InlineKeyboardButton(category, callback_data=category)] for category in CATEGORIES]
     reply_markup = InlineKeyboardMarkup(keyboard)
