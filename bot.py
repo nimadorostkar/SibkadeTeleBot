@@ -339,12 +339,11 @@ async def choose_product(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     await query.answer()
     product = query.data
     context.user_data['product'] = product
-    keyboard = [[InlineKeyboardButton(subscription, callback_data=subscription)] for subscription in SUBSCRIPTIONS]
+    subscription_options = get_subscription_options(product)
+    keyboard = [[InlineKeyboardButton(subscription, callback_data=subscription)] for subscription in subscription_options]
     reply_markup = InlineKeyboardMarkup(keyboard)
     await query.edit_message_text(text=f'You selected {product}. Now, choose a subscription period:', reply_markup=reply_markup)
-    subscription_options = get_subscription_options(product)
-    print(subscription_options)
-    return subscription_options
+    return SUBSCRIPTION
 
 # Subscription selection handler
 async def choose_subscription(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
