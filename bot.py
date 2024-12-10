@@ -331,6 +331,15 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    user_id = update.effective_user.id
+
+    links_response = requests.get("http://23.88.54.241:8000/authorized-users/")
+    links_data = links_response.json()
+
+    if not any(user_link['user_id'] == str(user_id) for user_link in links_data):
+        await update.message.reply_text("You are not authorized to use this bot.")
+
+
     keyboard = [[InlineKeyboardButton(category, callback_data=category)] for category in CATEGORIES]
     reply_markup = InlineKeyboardMarkup(keyboard)
     await update.message.reply_text('Please choose a category:', reply_markup=reply_markup)
