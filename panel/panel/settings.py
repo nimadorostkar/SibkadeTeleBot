@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'link',
     'order',
+    'user',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
