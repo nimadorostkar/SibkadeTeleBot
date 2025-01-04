@@ -97,126 +97,130 @@ async def button(update: Update, context: CallbackContext) -> None:
 async def handle_message(update: Update, context: CallbackContext) -> None:
     first_line = update.message.text.splitlines()[0].lower()
     if first_line.lower() == 'hey sibkade':
-        answer = update.message.text.splitlines()[1].lower()
-        orders = answer.split(",")
-        selected_product, subscription, email_field = orders
-        user = update.message.from_user.username
-        order_code = datetime.now().strftime("%Y%m%d%H%M%S")
 
-        if subscription == "1":
-            subs = "1 month"
-        elif subscription == "2":
-            subs = "2 month"
-        elif subscription == "3":
-            subs = "3 month"
-        elif subscription == "4":
-            subs = "4 month"
-        elif subscription == "6":
-            subs = "6 month"
-        elif subscription == "12":
-            subs = "12 month"
+        user_id = update.effective_user.id
+        links_response = requests.get("http://23.88.54.241:8000/authorized-users/")
+        links_data = links_response.json()
+        if not any(user_link['user_id'] == str(user_id) for user_link in links_data):
+            await update.message.reply_text("You are not authorized to use this bot.")
+        else:
+            answer = update.message.text.splitlines()[1].lower()
+            orders = answer.split(",")
+            selected_product, subscription, email_field = orders
+            user = update.message.from_user.username
+            order_code = datetime.now().strftime("%Y%m%d%H%M%S")
 
-        if selected_product == "AppleMusic" or selected_product == "applemusic":
-            links_response = requests.get(
-                f"http://23.88.54.241:8000/link-search?duration={subs}&is_active=true&type=AppleMusic")
-            links_data = links_response.json()
-            if links_data:
-                link_item = links_data[-1]
-                expiration = add_months(datetime.now(), int(subs[0]))
-                requests.get(f"http://23.88.54.241:8000/link-add-usage/{link_item['id']}")
+            if subscription == "1":
+                subs = "1 month"
+            elif subscription == "2":
+                subs = "2 month"
+            elif subscription == "3":
+                subs = "3 month"
+            elif subscription == "4":
+                subs = "4 month"
+            elif subscription == "6":
+                subs = "6 month"
+            elif subscription == "12":
+                subs = "12 month"
+
+            if selected_product == "AppleMusic" or selected_product == "applemusic":
+                links_response = requests.get(
+                    f"http://23.88.54.241:8000/link-search?duration={subs}&is_active=true&type=AppleMusic")
+                links_data = links_response.json()
+                if links_data:
+                    link_item = links_data[-1]
+                    expiration = add_months(datetime.now(), int(subs[0]))
+                    requests.get(f"http://23.88.54.241:8000/link-add-usage/{link_item['id']}")
+                    post_data = {
+                        'order_code': order_code,
+                        'link': link_item['id'],
+                        'user': user,
+                        'chat_id': update.message.chat_id,
+                        'message_id': update.message.message_id,
+                        'month': int(subs[0]),
+                        'type': "AppleMusic",
+                        'expiration': expiration.date(),
+                        'input': update.message.text
+                    }
+                    requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
+                    bttn = InlineKeyboardButton("Contact support", callback_data='support')
+                    markupp = InlineKeyboardMarkup([[bttn]])
+                    await update.message.reply_text(
+                        f"🗂️ Order Code: {order_code} \n\n👤 User: {user} \n🪪AppleID: {email_field} \n🛍️ You selected a AppleMusic with {subs} subscription.\n\n🎫Code: {link_item['code']}  \n🔗 Link: \n {link_item['link']} \n\n📅Expiration: {expiration.date()}   \n\n 🙏 Thank you for using our bot",
+                        reply_markup=markupp)
+                else:
+                    post_data = {
+                        'order_code': order_code,
+                        'user': user,
+                        'chat_id': update.message.chat_id,
+                        'month': int(subs[0]),
+                        'type': "AppleMusic",
+                        'message_id': update.message.message_id,
+                        'input': update.message.text
+                    }
+                    requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
+                    bttn = InlineKeyboardButton("Contact support", callback_data='support')
+                    markupp = InlineKeyboardMarkup([[bttn]])
+                    await update.message.reply_text(f"Not active link found, Your order has been registered, we will send it to you once it is ready. \n🗂️ Order Code: {order_code} ", reply_markup=markupp)
+
+
+
+            elif selected_product == "Spotify" or selected_product == "spotify":
                 post_data = {
                     'order_code': order_code,
-                    'link': link_item['id'],
                     'user': user,
                     'chat_id': update.message.chat_id,
+                    'month': int(subs[:2]),
+                    'type': "Spotify",
                     'message_id': update.message.message_id,
-                    'month': int(subs[0]),
-                    'type': "AppleMusic",
-                    'expiration': expiration.date(),
                     'input': update.message.text
                 }
                 requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
-                bttn = InlineKeyboardButton("Contact support", callback_data='support')
-                markupp = InlineKeyboardMarkup([[bttn]])
                 await update.message.reply_text(
-                    f"🗂️ Order Code: {order_code} \n\n👤 User: {user} \n🪪AppleID: {email_field} \n🛍️ You selected a AppleMusic with {subs} subscription.\n\n🎫Code: {link_item['code']}  \n🔗 Link: \n {link_item['link']} \n\n📅Expiration: {expiration.date()}   \n\n 🙏 Thank you for using our bot",
-                    reply_markup=markupp)
-            else:
-                post_data = {
-                    'order_code': order_code,
-                    'user': user,
-                    'chat_id': update.message.chat_id,
-                    'month': int(subs[0]),
-                    'type': "AppleMusic",
-                    'message_id': update.message.message_id,
-                    'input': update.message.text
-                }
-                requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
-                bttn = InlineKeyboardButton("Contact support", callback_data='support')
-                markupp = InlineKeyboardMarkup([[bttn]])
-                await update.message.reply_text(f"Not active link found, Your order has been registered, we will send it to you once it is ready. \n🗂️ Order Code: {order_code} ", reply_markup=markupp)
+                    f"🗂️ Order Code: {order_code} \n\n👤 User: {user} \n🛍️ You selected a Spotify with {subs} subscription.\n\nIt will be sent to you after the desired service is ready.   \n\n 🙏 Thank you for using our bot")
 
 
-
-        elif selected_product == "Spotify" or selected_product == "spotify":
-            post_data = {
-                'order_code': order_code,
-                'user': user,
-                'chat_id': update.message.chat_id,
-                'month': int(subs[:2]),
-                'type': "Spotify",
-                'message_id': update.message.message_id,
-                'input': update.message.text
-            }
-            requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
-            await update.message.reply_text(
-                f"🗂️ Order Code: {order_code} \n\n👤 User: {user} \n🛍️ You selected a Spotify with {subs} subscription.\n\nIt will be sent to you after the desired service is ready.   \n\n 🙏 Thank you for using our bot")
-
-
-        elif selected_product == "AppleOne" or selected_product == "appleone":
-            links_response = requests.get(
-                f"http://23.88.54.241:8000/link-search?duration={subs}&is_active=true&type=AppleOne")
-            links_data = links_response.json()
-            if links_data:
-                link_item = links_data[-1]
-                expiration = add_months(datetime.now(), int(subs[0]))
-                requests.get(f"http://23.88.54.241:8000/link-add-usage/{link_item['id']}")
-                post_data = {
-                    'order_code': order_code,
-                    'link': link_item['id'],
-                    'user': user,
-                    'chat_id': update.message.chat_id,
-                    'message_id': update.message.message_id,
-                    'month': int(subs[0]),
-                    'type': "AppleOne",
-                    'expiration': expiration.date(),
-                    'input': update.message.text
-                }
-                requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
-                bttn = InlineKeyboardButton("Contact support", callback_data='support')
-                markupp = InlineKeyboardMarkup([[bttn]])
-                await update.message.reply_text(
-                    f"🗂️ Order Code: {order_code} \n\n👤 User: {user} \n🪪AppleID: {email_field} \n🛍️ You selected a AppleOne with {subs} subscription.\n\n🎫Code: {link_item['code']}  \n🔗 Link: \n {link_item['link']} \n\n📅Expiration: {expiration.date()}   \n\n 🙏 Thank you for using our bot",
-                    reply_markup=markupp)
-            else:
-                post_data = {
-                    'order_code': order_code,
-                    'user': user,
-                    'chat_id': update.message.chat_id,
-                    'message_id': update.message.message_id,
-                    'month': int(subs[0]),
-                    'type': "AppleOne",
-                    'input': update.message.text
-                }
-                requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
-                bttn = InlineKeyboardButton("Contact support", callback_data='support')
-                markupp = InlineKeyboardMarkup([[bttn]])
-                await update.message.reply_text(
-                    f"Not active link found, Your order has been registered, we will send it to you once it is ready. \n🗂️ Order Code: {order_code}",
-                    reply_markup=markupp)
-
-
-
+            elif selected_product == "AppleOne" or selected_product == "appleone":
+                links_response = requests.get(
+                    f"http://23.88.54.241:8000/link-search?duration={subs}&is_active=true&type=AppleOne")
+                links_data = links_response.json()
+                if links_data:
+                    link_item = links_data[-1]
+                    expiration = add_months(datetime.now(), int(subs[0]))
+                    requests.get(f"http://23.88.54.241:8000/link-add-usage/{link_item['id']}")
+                    post_data = {
+                        'order_code': order_code,
+                        'link': link_item['id'],
+                        'user': user,
+                        'chat_id': update.message.chat_id,
+                        'message_id': update.message.message_id,
+                        'month': int(subs[0]),
+                        'type': "AppleOne",
+                        'expiration': expiration.date(),
+                        'input': update.message.text
+                    }
+                    requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
+                    bttn = InlineKeyboardButton("Contact support", callback_data='support')
+                    markupp = InlineKeyboardMarkup([[bttn]])
+                    await update.message.reply_text(
+                        f"🗂️ Order Code: {order_code} \n\n👤 User: {user} \n🪪AppleID: {email_field} \n🛍️ You selected a AppleOne with {subs} subscription.\n\n🎫Code: {link_item['code']}  \n🔗 Link: \n {link_item['link']} \n\n📅Expiration: {expiration.date()}   \n\n 🙏 Thank you for using our bot",
+                        reply_markup=markupp)
+                else:
+                    post_data = {
+                        'order_code': order_code,
+                        'user': user,
+                        'chat_id': update.message.chat_id,
+                        'message_id': update.message.message_id,
+                        'month': int(subs[0]),
+                        'type': "AppleOne",
+                        'input': update.message.text
+                    }
+                    requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
+                    bttn = InlineKeyboardButton("Contact support", callback_data='support')
+                    markupp = InlineKeyboardMarkup([[bttn]])
+                    await update.message.reply_text(
+                        f"Not active link found, Your order has been registered, we will send it to you once it is ready. \n🗂️ Order Code: {order_code}",
+                        reply_markup=markupp)
 
     else:
         answer = update.message.text

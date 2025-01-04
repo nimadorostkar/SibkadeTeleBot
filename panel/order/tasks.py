@@ -54,4 +54,3 @@ def my_daily_task():
         if today >= reminder_date:
             bot = telebot.TeleBot(TOKEN)
             bot.send_message(chat_id=item.chat_id, text=f"3 days until the end of your service. \norder_code: {item.order_code} \nyour service expiration is {item.expiration}",reply_to_message_id=item.message_id)
-
