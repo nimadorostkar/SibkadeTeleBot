@@ -16,7 +16,7 @@ app.conf.beat_schedule = {
     },
     'run-my-weekly-task': {
         'task': 'order.tasks.send_weekly_orders',
-        'schedule': crontab(day_of_week='saturday', hour=18, minute=45),  # every friday at midnight
+        'schedule': crontab(day_of_week='saturday', hour=18, minute=37),  # every friday at midnight
     },
 }
 app.conf.timezone = 'UTC'
