@@ -14,6 +14,7 @@ TOKEN = "7445678382:AAG3-dxleieDz_dBJh4YCeMHQeuj389gM6U"
 @shared_task
 def send_weekly_orders():
     bot = telebot.TeleBot(TOKEN)
+    bot.send_message(chat_id="1759061065", text="hhhh")
     seven_days_ago = timezone.now() - timedelta(days=7)
 
     # Query and group by user, month, and type
@@ -41,8 +42,6 @@ def send_weekly_orders():
 
 @shared_task
 def my_daily_task():
-    bot = telebot.TeleBot(TOKEN)
-    bot.send_message(chat_id="1759061065", text="heyy")
     orders = Order.objects.filter(status="Done")
     for item in orders:
         expiration_date = datetime.strptime(item.expiration, "%Y-%m-%d")
