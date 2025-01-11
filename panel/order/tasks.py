@@ -14,12 +14,6 @@ TOKEN = "7445678382:AAG3-dxleieDz_dBJh4YCeMHQeuj389gM6U"
 @shared_task
 def send_weekly_orders():
     bot = telebot.TeleBot(TOKEN)
-    print("-------NNN------")
-    try:
-        bot.send_message(chat_id="1759061065", text="Task Started")
-    except Exception as e:
-        print(f"Error sending message: {e}")
-
     seven_days_ago = timezone.now() - timedelta(days=7)
 
     # Query and group by user, month, and type
@@ -39,10 +33,10 @@ def send_weekly_orders():
             f"Month: {order['month']}\n"
             f"Order Count: {order['order_count']}\n\n"
         )
-    #bot.send_message(chat_id="4516176630", text=f"```\n{message}\n```", parse_mode='Markdown')
-    #bot.send_message(chat_id="5554989830", text=f"```\n{message}\n```", parse_mode='Markdown')
 
     try:
+        bot.send_message(chat_id="4516176630", text=f"```\n{message}\n```", parse_mode='Markdown')
+        bot.send_message(chat_id="5554989830", text=f"```\n{message}\n```", parse_mode='Markdown')
         bot.send_message(chat_id="1759061065", text=f"```\n{message}\n```", parse_mode='Markdown')
     except Exception as e:
         print(f"Error sending summary: {e}")
