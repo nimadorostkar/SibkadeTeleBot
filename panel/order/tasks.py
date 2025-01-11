@@ -14,6 +14,7 @@ TOKEN = "7445678382:AAG3-dxleieDz_dBJh4YCeMHQeuj389gM6U"
 @shared_task
 def send_weekly_orders():
     bot = telebot.TeleBot(TOKEN)
+    print("-------NNN------")
     bot.send_message(chat_id="1759061065", text="hhhh")
     seven_days_ago = timezone.now() - timedelta(days=7)
 
