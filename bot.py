@@ -148,6 +148,11 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     await update.message.reply_text(
                         f"🗂️ Order Code: {order_code} \n\n👤 User: {user} \n🪪AppleID: {email_field} \n🛍️ You selected a AppleMusic with {subs} subscription.\n\n🎫Code: {link_item['code']}  \n🔗 Link: \n {link_item['link']} \n\n📅Expiration: {expiration.date()}   \n\n 🙏 Thank you for using our bot",
                         reply_markup=markupp)
+
+                    context.user_data['category'] = ''
+                    context.user_data['product'] = ''
+                    context.user_data['subscription'] = ''
+
                 else:
                     post_data = {
                         'order_code': order_code,
@@ -163,6 +168,9 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     markupp = InlineKeyboardMarkup([[bttn]])
                     await update.message.reply_text(f"Not active link found, Your order has been registered, we will send it to you once it is ready. \n🗂️ Order Code: {order_code} ", reply_markup=markupp)
 
+                    context.user_data['category'] = ''
+                    context.user_data['product'] = ''
+                    context.user_data['subscription'] = ''
 
 
             elif selected_product == "Spotify" or selected_product == "spotify":
@@ -257,6 +265,12 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                 bttn = InlineKeyboardButton("Contact support", callback_data='support')
                 markupp = InlineKeyboardMarkup([[bttn]])
                 await update.message.reply_text(f"🗂️ Order Code: {order_code} \n\n👤 User: {user} \n🪪AppleID: {email_field} \n🛍️ You selected a {selected_product} with {subscription} subscription.\n\n🎫Code: {link_item['code']}  \n🔗 Link: \n {link_item['link']} \n\n📅Expiration: {expiration.date()}   \n\n 🙏 Thank you for using our bot",reply_markup=markupp)
+
+                context.user_data['category'] = ''
+                context.user_data['product'] = ''
+                context.user_data['subscription'] = ''
+
+
             else:
                 post_data = {
                     'order_code': order_code,
@@ -274,6 +288,10 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                     f"Not active link found, Your order has been registered, we will send it to you once it is ready. \n🗂️ Order Code: {order_code}",
                     reply_markup=markupp)
 
+                context.user_data['category'] = ''
+                context.user_data['product'] = ''
+                context.user_data['subscription'] = ''
+
 
         elif context.user_data['product'] == "Spotify":
             post_data = {
@@ -288,6 +306,10 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
             requests.post('http://23.88.54.241:8000/add-order/', data=post_data)
             await update.message.reply_text(
                 f"🗂️ Order Code: {order_code} \n\n👤 User: {user} \n🛍️ You selected a {selected_product} with {subscription} subscription.\n\nIt will be sent to you after the desired service is ready.   \n\n 🙏 Thank you for using our bot")
+
+            context.user_data['category'] = ''
+            context.user_data['product'] = ''
+            context.user_data['subscription'] = ''
 
 
         elif context.user_data['product'] == "AppleOne":
@@ -314,6 +336,11 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                 await update.message.reply_text(
                     f"🗂️ Order Code: {order_code} \n\n👤 User: {user} \n🪪AppleID: {email_field} \n🛍️ You selected a {selected_product} with {subscription} subscription.\n\n🎫Code: {link_item['code']}  \n🔗 Link: \n {link_item['link']} \n\n📅Expiration: {expiration.date()}   \n\n 🙏 Thank you for using our bot",
                     reply_markup=markupp)
+
+                context.user_data['category'] = ''
+                context.user_data['product'] = ''
+                context.user_data['subscription'] = ''
+
             else:
                 post_data = {
                     'order_code': order_code,
@@ -330,6 +357,13 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
                 await update.message.reply_text(
                     f"Not active link found, Your order has been registered, we will send it to you once it is ready. \n🗂️ Order Code: {order_code}",
                     reply_markup=markupp)
+
+                context.user_data['category'] = ''
+                context.user_data['product'] = ''
+                context.user_data['subscription'] = ''
+
+
+
 
 
 
