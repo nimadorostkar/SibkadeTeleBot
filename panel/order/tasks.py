@@ -35,7 +35,6 @@ def send_weekly_orders():
         )
 
     try:
-        bot.send_message(chat_id="4516176630", text=f"```\n{message}\n```", parse_mode='Markdown')
         bot.send_message(chat_id="5554989830", text=f"```\n{message}\n```", parse_mode='Markdown')
         bot.send_message(chat_id="1759061065", text=f"```\n{message}\n```", parse_mode='Markdown')
     except Exception as e:
